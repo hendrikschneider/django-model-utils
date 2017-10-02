@@ -19,7 +19,7 @@ class AutoCreatedField(models.DateTimeField):
     """
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('editable', False)
-        kwargs.setdefault('default', now)
+        kwargs.setdefault('auto_add_now', True)
         super(AutoCreatedField, self).__init__(*args, **kwargs)
 
 
@@ -30,10 +30,9 @@ class AutoLastModifiedField(AutoCreatedField):
     By default, sets editable=False and default=datetime.now.
 
     """
-    def pre_save(self, model_instance, add):
-        value = now()
-        setattr(model_instance, self.attname, value)
-        return value
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('auto_now', True)
+        super(AutoLastModifiedField, self).__init__(*args, **kwargs)
 
 
 class StatusField(models.CharField):
